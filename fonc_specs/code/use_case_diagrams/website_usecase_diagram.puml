@@ -1,0 +1,81 @@
+@startuml
+
+skinparam dpi 800
+left to right direction
+skinparam nodesep 45
+'skinparam backgroundColor #F1F1F1
+
+actor Client
+actor Visiteur
+actor Utilisateur
+
+rectangle "Site web OC Pizza" {
+    usecase (S'inscrire) as signUp
+    usecase (Se connecter) as signIn
+    usecase (Afficher mon compte) as showAccount
+    usecase (Voir mes commande) as showMyOrders
+    usecase (Afficher le catalogue) as showAll
+    usecase (Afficher la page d'une pizza) as showOne
+    usecase (Ajouter une pizza au panier) as addToCard
+    usecase Commander as order
+    usecase (Voir l'état d'une commande) as trackOrder
+    usecase (Se déconnecter) as signOut
+    usecase (Commander par téléphone) as orderByPhone
+    usecase (Commander en ligne) as orderOnLine
+    usecase (Sélectionner l'option "à emporter") as emporter
+    usecase (Sélectionner l'option "payer à la cueillette") as payAtC
+    usecase (Sélectionner l'option "payer à la livraison") as payAtDelivery
+    usecase (Commander sur place) as orderAtPizzeria
+    usecase Payer
+    usecase (Afficher le numéro de téléphone\nde la pizzeria la plus proche) as showNumOfClosest
+    usecase (Afficher les localisations des\n pizzerias la plus proches <Map>) as showLocOfClosest
+    usecase (Afficher le Panier) as showCard
+    usecase (Modifier une commande) as editOrder
+    usecase (Annuler une commande) as cancelOrder
+
+    note bottom of Payer
+        Optionel parce que l'utilisateur
+        peut choisir de payer à la livraison
+    end note
+}
+
+Visiteur --- signUp
+
+Utilisateur --- addToCard
+Utilisateur --- showAll
+Utilisateur --- showOne
+Utilisateur --- showCard
+Utilisateur --- order
+
+
+order <-- orderByPhone
+order <-- orderOnLine
+order <-- orderAtPizzeria
+orderOnLine <.. Payer : <<extends>>
+orderOnLine <. emporter : <<extends>>
+emporter <.. payAtC : <<extends>>
+orderOnLine <.. payAtDelivery : <<extends>>
+
+'showAll <. showOne
+'showOne <. addToCard : <<extends>>
+orderAtPizzeria ..> showLocOfClosest  : <<include>>
+orderByPhone ..> showNumOfClosest : <<include>>
+
+Client --- trackOrder
+Client --- showAccount
+Client --- showMyOrders
+Client --- editOrder
+Client --- signOut
+
+editOrder <.. cancelOrder : <<extends>>
+
+showAccount ..> signIn : <<include>>
+showMyOrders ..> signIn : <<include>>
+trackOrder ..> signIn : <<include>>
+signOut ..> signIn : <<include>>
+editOrder ..> signIn : <<include>>
+
+Visiteur -> Utilisateur
+Utilisateur <- Client
+
+@enduml

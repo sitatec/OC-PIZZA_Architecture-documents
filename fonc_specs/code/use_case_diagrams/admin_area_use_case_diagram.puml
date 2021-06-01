@@ -1,0 +1,131 @@
+@startuml
+skinparam dpi 800
+left to right direction
+
+actor Responsable
+actor "Responsable Privilégié" as superUser
+
+rectangle "Espace d'administration" {
+    usecase (Créer un compte Pizzaiolo) as createPizzaioloAccount
+    usecase (Créer un compte Livreur) as createDeliverAccount
+    usecase (Créer un compte Responsable) as createResponsableAccount
+    usecase (Afficher la liste des Pizzaiolo) as showPizzaiolos
+    usecase (Afficher la liste des Livreurs) as showDelivers
+    usecase (Afficher la liste des Clients) as showClients
+    usecase (Supprimer le compte d'un Utilisateur) as deleteUerAccount
+    usecase (Modifier les informations d'un Utilisateur) as editUserInfo
+    usecase (Bloqué le compte d'un Utilisateur) as blockUser
+    usecase (Débloqué le compte d'un Utilisateur) as unblockUser
+    usecase (Afficher les commandes) as showOrders
+    usecase (Afficher la liste de toutes les commandes) as showAllOrders
+    usecase (Afficher les commandes en attente de livraison) as showOrdersWaitingForDelivery
+    usecase (Afficher la liste des commandes en cours de livraison) as showOrdersInDeliveringProcess
+    usecase (Afficher la liste des commandes en cours de préparation) as showOrdersInCookingProcess
+    usecase (Afficher les commandes livrées) as showDeliveredOrders
+    usecase (Afficher la liste des commandes annulées) as showCanceledOrders
+    usecase (Effectuer des actions sur les commandes) as makeActionsOnOrders
+    usecase (Supprimer une commande) as deleteOrder
+    usecase (Modifier une commande) as editOrder
+    usecase (Annuler une commande) as cancelOrder
+    usecase (Créer un compte Employé) as createUserAccount
+    usecase (Afficher la liste des Responsables) as showResponsables
+    usecase (Ajouter une pizzeria) as createPizzeria
+    usecase (Supprimer une pizzeria) as removePizzeria
+    usecase (Afficher la liste des pizzerias) as showPizzerias
+    usecase (Afficher les détails d'une pizzeria) as showPizzeriaDetails
+    usecase (Afficher la liste des utilisateurs) as showUsers
+    usecase (Afficher les statistiques d'une pizzeria: \n par jour/semaine/mois/année) as showPizzeriaStats
+    usecase (Modifier les informations d'une pizzeria) as editPizzeriaInfo
+    usecase (Gérer les commandes) as managerOrders
+    usecase (Vérifier les stocks) as checkStock
+    usecase (Mettre à jour les stocks) as updateStock
+    usecase (Gérer un compte Utilisateur) as manageUserAccount
+    usecase (Créer l'aide-mémoire d'une pizza) as createMem_aid
+    usecase (Modifier l'aide-mémoire d'une pizza) as editMem_aid
+    usecase (Supprimer l'aide-mémoire d'une pizza) as deleteMem_aid
+    usecase (Créer une pizza) as createPizza
+    usecase (Afficher la liste de toutes les pizza) as showAllPizza
+    usecase (Supprimer une pizza) as deletePizza
+    usecase (Modifier une pizza) as editPizza
+    usecase (Afficher les détails d'une pizza) as showPizzaDetails
+    usecase (Se Connecter) as login
+
+    note right of login
+        Tous les cas d'utilisation requièrent que l'utilisateur soit connecté.
+        Les contraintes <<includes>> sont volontairement omises pour la
+        lisibilité du diagramme.
+    end note
+}
+
+Responsable -- login
+Responsable -- showUsers
+Responsable -- managerOrders
+Responsable -- showPizzerias
+Responsable -- showPizzeriaDetails
+Responsable -- showPizzeriaStats
+Responsable -- editPizzeriaInfo
+Responsable -- checkStock
+Responsable -- updateStock
+Responsable -- createUserAccount
+Responsable -- manageUserAccount
+Responsable -- createPizza
+Responsable -- showAllPizza
+Responsable -- editPizza
+Responsable -- deletePizza
+Responsable -- showPizzaDetails
+
+superUser -- createPizzeria
+superUser -- removePizzeria
+superUser -- createResponsableAccount
+superUser -- showResponsables
+
+managerOrders <-- showOrders
+managerOrders <-- makeActionsOnOrders
+
+makeActionsOnOrders <-- editOrder
+makeActionsOnOrders <-- deleteOrder
+makeActionsOnOrders <-- cancelOrder
+
+createPizza ..> createMem_aid : <<includes>>
+deletePizza <.. deleteMem_aid : <<extends>>
+editPizza <.. editMem_aid : <<extends>>
+
+showOrders <-- showAllOrders
+showOrders <-- showOrdersInDeliveringProcess
+showOrders <-- showCanceledOrders
+showOrders <-- showOrdersInDeliveringProcess
+showOrders <-- showOrdersInCookingProcess
+showOrders <-- showDeliveredOrders
+showOrders <-- showOrdersWaitingForDelivery
+
+manageUserAccount <-- deleteUerAccount
+manageUserAccount <-- editUserInfo
+manageUserAccount <-- blockUser
+manageUserAccount <-- unblockUser
+
+showUsers <-- showPizzaiolos
+showUsers <-- showDelivers
+showUsers <-- showClients
+
+createUserAccount <-- createDeliverAccount
+createUserAccount <-- createPizzaioloAccount
+
+Responsable <- superUser
+
+'showUsers ..> login : <<include>>
+'deleteUerAccount ..> login : <<include>>
+'editUserInfo ..> login : <<include>>
+'blockUser ..> login : <<include>>
+'unblockUser ..> login : <<include>>
+'showAllOrders ..> login : <<include>>
+'showOrdersInDeliveringProcess ..> login : <<include>>
+'showCanceledOrders ..> login : <<include>>
+'deleteOrder ..> login : <<include>>
+'showPizzerias ..> login : <<include>>
+'showPizzeriaDetails ..> login : <<include>>
+'showPizzeriaStats ..> login : <<include>>
+'editPizzeriaInfo ..> login : <<include>>
+'updateStock ..> login : <<include>>
+'checkStock ..> login : <<include>>
+
+@enduml

@@ -1,0 +1,55 @@
+@startuml
+
+skinparam dpi 800
+left to right direction
+
+actor Pizzaiolo
+
+rectangle "Application des Pizzaiolos OC Pizza" {
+    usecase "Se connecter" as authenticate
+
+    usecase "Recevoir une notification (nouvelle commande)" as notify
+    usecase "Vérifier le stock d’ingrédients" as checkStock
+    usecase "Enregistrer une commande" as saveOrder
+    usecase "Indiquer qu'une commande est en préparation" as inPrep
+    usecase "Indiquer qu'une commande est prête" as readyToDeliver
+    usecase "Indiquer qu'une commande a été cueillie" as readyToBePicked
+    usecase "Sélectionner le type de commande \n (par téléphone ou sur place)" as selectOrderType
+    usecase "Afficher la liste des commandes" as showOrders
+    usecase "Afficher la liste des commandes en attentes" as showPendingOrders
+    usecase "Afficher la liste des commandes en préparation" as showOrdersInProgress
+    usecase "Afficher la liste des commandes préparées" as showTodayOrders
+'    usecase "Enregistrer une commande passé par téléphone" as savePhoneOrder
+'    usecase "Enregistrer une commande passé par sur place" as savePla ceOrder
+    usecase "Afficher l'aide-mémoire" as mem_aid
+    usecase "Modifier l'aide-mémoire d'une pizza" as editMemAid
+'    usecase "Recevoir l'autorisation du Responsable" as getAuthorisation
+
+    note bottom of authenticate
+        Tous les cas d'utilisation requièrent que l'utilisateur soit connecté.
+        Les contraintes <<includes>> sont volontairement omises pour la
+        lisibilité du diagramme.
+    end note
+}
+
+Pizzaiolo -- checkStock
+Pizzaiolo -- inPrep
+Pizzaiolo -- readyToDeliver
+Pizzaiolo -- mem_aid
+Pizzaiolo -- saveOrder
+Pizzaiolo -- notify
+Pizzaiolo -- authenticate
+Pizzaiolo -- showOrders
+Pizzaiolo -- editMemAid
+Pizzaiolo -- readyToBePicked
+
+'saveOrder <-- savePhoneOrder
+'saveOrder <-- savePlaceOrder
+saveOrder <.. selectOrderType : <<includes>>
+'editMemAid <.. getAuthorisation : <<includes>>
+
+showOrders <-- showPendingOrders
+showOrders <-- showOrdersInProgress
+showOrders <-- showTodayOrders
+
+@enduml

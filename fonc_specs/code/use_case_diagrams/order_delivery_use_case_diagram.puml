@@ -1,0 +1,40 @@
+@startuml
+
+skinparam dpi 800
+left to right direction
+skinparam nodesep 60
+
+actor Livreur
+
+rectangle "Application des livreurs OC Pizza" {
+    usecase "Se connecter" as authenticate
+    usecase "Recevoir un notification \n <nouvelle livraison disponible>" as notify
+    usecase "Afficher la liste des livraisons" as showDeliveries
+    usecase "Commencer une livraison" as startDelivery
+    usecase "Finaliser une livraison" as delivered
+    usecase "Afficher la liste de mes livraisons en cours" as showDeliveriesInProgress
+    usecase "Afficher la liste des livraisons\n que j'ai effectué aujourd'hui" as showTodayDeliveries
+    usecase "Afficher la liste de toutes les livraisons en attentes" as showAllDeliveries
+    usecase "Afficher les details d'une livraison" as showDeliveryDetails
+    usecase "Afficher les details de la commande associée" as showOrderDetails
+
+    note bottom of authenticate
+        Tous les cas d'utilisation requièrent que l'utilisateur soit connecté.
+        Les contraintes <<includes>> sont volontairement omises pour la
+        lisibilité du diagramme.
+    end note
+}
+Livreur -- notify
+Livreur -- authenticate
+Livreur -- startDelivery
+Livreur -- showDeliveries
+Livreur -- delivered
+Livreur -- showDeliveryDetails
+
+showDeliveries <-- showAllDeliveries
+showDeliveries <-- showDeliveriesInProgress
+showDeliveries <-- showTodayDeliveries
+
+showDeliveryDetails <.. showOrderDetails : <<extends>>
+
+@enduml

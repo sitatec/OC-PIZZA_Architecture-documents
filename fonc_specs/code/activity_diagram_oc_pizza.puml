@@ -1,0 +1,73 @@
+@startuml
+
+skinparam dpi 900
+
+|Site web|
+    start
+    :Afficher le catalogue;
+    :Afficher la page d'une pizza;
+    :Ajouter la pizza au panier;
+    :Commander le contenu du panier;
+    if (Utilisateur connecté ?) then (Non)
+        |Site web|
+            if (Utilisateur déjà inscrit ?) then (Oui)
+            repeat :Afficher la page de connection;
+               : L'utilisateur saisit ses identifiants;
+            repeat while (Identifiants corrects ?) is (Non) not (Oui)
+            else (Non)
+            repeat : Afficher la page d'inscription;
+               : L'utilisateur remplit le formulaire;
+            repeat while (Formulaire valide ?) is (Non) not (Oui)
+            endif
+    else (Oui)
+    endif
+    if (Choisir la méthode de paiement) then (A la livraison ou A la cueillette)
+    else (En ligne)
+        :Efféctuer le paiement;
+    endif
+    |Backend|
+        :Traiter la commande;
+        fork
+            |Site web|
+                :Afficher un message de confimation;
+                :Afficher mon Compte;
+                :Afficher Mes commandes;
+                :Afficher la dernière commande;
+                :Faire une demande d'annulation;
+            |Backend|
+                if (La préparation de la commande a commancé ?) then (Oui)
+                    |Site web|
+                        :                Afficher un message
+                        (Impossible d'annuler la commande);
+                detach
+            |Backend|
+                else (Non)
+                        :Annuler la commande;
+                        :Rembourser le client;
+                    |Site web|
+                        :Afficher un message de confimation;
+                        stop
+                endif
+        fork again
+    |Application des Pizzaiolos|
+        :Afficher une notification (nouvelle commande);
+        :Préparation de la commande;
+        |Backend|
+            :Mettre l'état de la commande <<En Préparation>>
+            (La commande ne peut plus être annulée);
+    |Application des Pizzaiolos|
+        :Commande prète;
+    |Backend|
+        :Trouver le livreur disponible le plus proche;
+    |Application des Livreurs|
+        :Afficher une notification (nouvelle livraison);
+        :Commencer la livraison;
+        :Finaliser la livraison;
+'    |Site web|
+'        :Livreur arrivé;
+'        if(Méthode de paiement choisi) then (A la livraison)
+'            :Efféctuer le paiement;
+'        else (En ligne)
+'        endif
+        stop
+@enduml

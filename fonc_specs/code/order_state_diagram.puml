@@ -1,0 +1,27 @@
+@startuml
+
+skinparam ranksep 100
+
+'title Diagramme d'état d'une commande\n
+
+state "En attente de préparation" as enAttente
+state "En préparation" as enPrep
+state "Prète à être livrée" as Prete
+state "Prète à être cueillie" as PreteC
+state "En cours de livraison" as enLivr
+
+
+[*] --> enAttente : Le Client Passe la commande
+enAttente --> enPrep : Le Pizzaiolo commence la préparation
+enPrep --> Prete : Le Pizzaiolo finit la préparation [à livrer]
+enPrep -> PreteC : Le Pizzaiolo finit la préparation [à emporter]
+Prete -> enLivr : Le Livreur commence la livraison
+PreteC -> Cueillie : Le Client récupère la commande
+enLivr -> Livrée : Le Livreur finit la livraison \t\t\t
+enAttente -> Annulée : Le Client annule la commande \t\t\t\t\t\t
+'Annulée -[hidden]---> Livrée
+Annulée --> [*]
+Livrée -up-> [*] : \t\t\t\t\t
+Cueillie -> [*]
+
+@enduml

@@ -1,0 +1,1554 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 13.2
+-- Dumped by pg_dump version 13.2
+
+-- Started on 2021-05-12 11:55:32 EDT
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 207 (class 1259 OID 18974)
+-- Name: adresse; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.adresse (
+    id integer NOT NULL,
+    teritoire character varying NOT NULL,
+    ville character varying NOT NULL,
+    rue character varying NOT NULL,
+    code_postal character varying NOT NULL,
+    num_batiment integer NOT NULL,
+    pays character varying NOT NULL
+);
+
+
+ALTER TABLE public.adresse OWNER TO postgres;
+
+--
+-- TOC entry 206 (class 1259 OID 18972)
+-- Name: adresse_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.adresse_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.adresse_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3481 (class 0 OID 0)
+-- Dependencies: 206
+-- Name: adresse_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.adresse_id_seq OWNED BY public.adresse.id;
+
+
+--
+-- TOC entry 205 (class 1259 OID 18963)
+-- Name: aide_memoire; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.aide_memoire (
+    id integer NOT NULL,
+    pizza_id integer NOT NULL,
+    nom character varying,
+    contenu text NOT NULL
+);
+
+
+ALTER TABLE public.aide_memoire OWNER TO postgres;
+
+--
+-- TOC entry 204 (class 1259 OID 18961)
+-- Name: aide_memoire_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.aide_memoire_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.aide_memoire_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3482 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: aide_memoire_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.aide_memoire_id_seq OWNED BY public.aide_memoire.id;
+
+
+--
+-- TOC entry 221 (class 1259 OID 19054)
+-- Name: carte_credit; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.carte_credit (
+    numero numeric(16,0) NOT NULL,
+    annee_expiration numeric(4,0) NOT NULL,
+    mois_expiration numeric(2,0) NOT NULL,
+    nom_proprietaire character varying NOT NULL,
+    client_id integer NOT NULL
+);
+
+
+ALTER TABLE public.carte_credit OWNER TO postgres;
+
+--
+-- TOC entry 217 (class 1259 OID 19035)
+-- Name: client; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.client (
+    utilisateur_id integer NOT NULL
+);
+
+
+ALTER TABLE public.client OWNER TO postgres;
+
+--
+-- TOC entry 223 (class 1259 OID 19064)
+-- Name: commande; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.commande (
+    numero integer NOT NULL,
+    date_heure timestamp without time zone NOT NULL,
+    pizzeria_id integer,
+    prix_total_ttc integer NOT NULL,
+    etat smallint NOT NULL,
+    adresse_id integer,
+    client_id integer,
+    pizzaiolo_id integer
+);
+
+
+ALTER TABLE public.commande OWNER TO postgres;
+
+--
+-- TOC entry 222 (class 1259 OID 19062)
+-- Name: commande_numero_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.commande_numero_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.commande_numero_seq OWNER TO postgres;
+
+--
+-- TOC entry 3483 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: commande_numero_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.commande_numero_seq OWNED BY public.commande.numero;
+
+
+--
+-- TOC entry 220 (class 1259 OID 19049)
+-- Name: element_panier; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.element_panier (
+    panier_id integer NOT NULL,
+    pizza_id integer NOT NULL,
+    quantite integer NOT NULL
+);
+
+
+ALTER TABLE public.element_panier OWNER TO postgres;
+
+--
+-- TOC entry 231 (class 1259 OID 19105)
+-- Name: image_pizza; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.image_pizza (
+    id integer NOT NULL,
+    url character varying NOT NULL,
+    pizza_id integer NOT NULL
+);
+
+
+ALTER TABLE public.image_pizza OWNER TO postgres;
+
+--
+-- TOC entry 230 (class 1259 OID 19103)
+-- Name: image_pizza_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.image_pizza_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.image_pizza_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3484 (class 0 OID 0)
+-- Dependencies: 230
+-- Name: image_pizza_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.image_pizza_id_seq OWNED BY public.image_pizza.id;
+
+
+--
+-- TOC entry 227 (class 1259 OID 19086)
+-- Name: ingredient; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.ingredient (
+    id integer NOT NULL,
+    nom character varying NOT NULL,
+    description text NOT NULL
+);
+
+
+ALTER TABLE public.ingredient OWNER TO postgres;
+
+--
+-- TOC entry 226 (class 1259 OID 19084)
+-- Name: ingredient_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.ingredient_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.ingredient_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3485 (class 0 OID 0)
+-- Dependencies: 226
+-- Name: ingredient_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.ingredient_id_seq OWNED BY public.ingredient.id;
+
+
+--
+-- TOC entry 229 (class 1259 OID 19098)
+-- Name: ingredient_pizza_association; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.ingredient_pizza_association (
+    pizza_id integer NOT NULL,
+    ingredient_id integer NOT NULL
+);
+
+
+ALTER TABLE public.ingredient_pizza_association OWNER TO postgres;
+
+--
+-- TOC entry 201 (class 1259 OID 18941)
+-- Name: jour_ouvrable; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.jour_ouvrable (
+    id integer NOT NULL,
+    jour character varying NOT NULL,
+    heure_ouverture time without time zone NOT NULL,
+    heure_fermeture time without time zone NOT NULL
+);
+
+
+ALTER TABLE public.jour_ouvrable OWNER TO postgres;
+
+--
+-- TOC entry 200 (class 1259 OID 18939)
+-- Name: jour_ouvrable_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.jour_ouvrable_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.jour_ouvrable_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3486 (class 0 OID 0)
+-- Dependencies: 200
+-- Name: jour_ouvrable_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.jour_ouvrable_id_seq OWNED BY public.jour_ouvrable.id;
+
+
+--
+-- TOC entry 224 (class 1259 OID 19071)
+-- Name: ligne_commande; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.ligne_commande (
+    pizza_id integer NOT NULL,
+    commande_numero integer NOT NULL,
+    quantite integer NOT NULL
+);
+
+
+ALTER TABLE public.ligne_commande OWNER TO postgres;
+
+--
+-- TOC entry 225 (class 1259 OID 19076)
+-- Name: livraison; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.livraison (
+    commande_numero integer NOT NULL,
+    livreur_id integer NOT NULL,
+    date_heure timestamp without time zone NOT NULL,
+    etat smallint NOT NULL,
+    instruction character varying NOT NULL
+);
+
+
+ALTER TABLE public.livraison OWNER TO postgres;
+
+--
+-- TOC entry 215 (class 1259 OID 19020)
+-- Name: livreur; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.livreur (
+    utilisateur_id integer NOT NULL,
+    url_photo_permis_conduire character varying NOT NULL,
+    total_livraison_effectuee integer NOT NULL
+);
+
+
+ALTER TABLE public.livreur OWNER TO postgres;
+
+--
+-- TOC entry 219 (class 1259 OID 19043)
+-- Name: panier; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.panier (
+    id integer NOT NULL,
+    client_id integer NOT NULL
+);
+
+
+ALTER TABLE public.panier OWNER TO postgres;
+
+--
+-- TOC entry 218 (class 1259 OID 19041)
+-- Name: panier_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.panier_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.panier_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3487 (class 0 OID 0)
+-- Dependencies: 218
+-- Name: panier_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.panier_id_seq OWNED BY public.panier.id;
+
+
+--
+-- TOC entry 203 (class 1259 OID 18952)
+-- Name: pizza; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.pizza (
+    id integer NOT NULL,
+    nom character varying NOT NULL,
+    description text NOT NULL,
+    prix numeric(5,2) NOT NULL
+);
+
+
+ALTER TABLE public.pizza OWNER TO postgres;
+
+--
+-- TOC entry 202 (class 1259 OID 18950)
+-- Name: pizza_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.pizza_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.pizza_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3488 (class 0 OID 0)
+-- Dependencies: 202
+-- Name: pizza_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.pizza_id_seq OWNED BY public.pizza.id;
+
+
+--
+-- TOC entry 216 (class 1259 OID 19029)
+-- Name: pizzaiolo; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.pizzaiolo (
+    utilisateur_id integer NOT NULL,
+    total_commande_preparee integer NOT NULL
+);
+
+
+ALTER TABLE public.pizzaiolo OWNER TO postgres;
+
+--
+-- TOC entry 209 (class 1259 OID 18985)
+-- Name: pizzeria; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.pizzeria (
+    id integer NOT NULL,
+    adresse_id integer NOT NULL,
+    taux_tax numeric(5,3) NOT NULL
+);
+
+
+ALTER TABLE public.pizzeria OWNER TO postgres;
+
+--
+-- TOC entry 208 (class 1259 OID 18983)
+-- Name: pizzeria_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.pizzeria_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.pizzeria_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3489 (class 0 OID 0)
+-- Dependencies: 208
+-- Name: pizzeria_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.pizzeria_id_seq OWNED BY public.pizzeria.id;
+
+
+--
+-- TOC entry 210 (class 1259 OID 18992)
+-- Name: pizzeria_jour_ouvrable; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.pizzeria_jour_ouvrable (
+    pizzeria_id integer NOT NULL,
+    jour_ouvrable_id integer NOT NULL
+);
+
+
+ALTER TABLE public.pizzeria_jour_ouvrable OWNER TO postgres;
+
+--
+-- TOC entry 213 (class 1259 OID 19009)
+-- Name: responsable; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.responsable (
+    utilisateur_id integer NOT NULL
+);
+
+
+ALTER TABLE public.responsable OWNER TO postgres;
+
+--
+-- TOC entry 214 (class 1259 OID 19015)
+-- Name: responsable_privilegie; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.responsable_privilegie (
+    responsable_id integer NOT NULL
+);
+
+
+ALTER TABLE public.responsable_privilegie OWNER TO postgres;
+
+--
+-- TOC entry 228 (class 1259 OID 19095)
+-- Name: stock; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.stock (
+    pizzeria_id integer NOT NULL,
+    ingredient_id integer NOT NULL,
+    quantite integer NOT NULL
+);
+
+
+ALTER TABLE public.stock OWNER TO postgres;
+
+--
+-- TOC entry 212 (class 1259 OID 18999)
+-- Name: utilisateur; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.utilisateur (
+    id integer NOT NULL,
+    nom character varying NOT NULL,
+    prenom character varying NOT NULL,
+    email character varying NOT NULL,
+    adresse_id integer NOT NULL,
+    numero_telephone numeric(12,0) NOT NULL,
+    pizzeria_id integer NOT NULL
+);
+
+
+ALTER TABLE public.utilisateur OWNER TO postgres;
+
+--
+-- TOC entry 211 (class 1259 OID 18997)
+-- Name: utilisateur_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.utilisateur_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.utilisateur_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3490 (class 0 OID 0)
+-- Dependencies: 211
+-- Name: utilisateur_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.utilisateur_id_seq OWNED BY public.utilisateur.id;
+
+
+--
+-- TOC entry 3230 (class 2604 OID 18977)
+-- Name: adresse id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.adresse ALTER COLUMN id SET DEFAULT nextval('public.adresse_id_seq'::regclass);
+
+
+--
+-- TOC entry 3229 (class 2604 OID 18966)
+-- Name: aide_memoire id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.aide_memoire ALTER COLUMN id SET DEFAULT nextval('public.aide_memoire_id_seq'::regclass);
+
+
+--
+-- TOC entry 3234 (class 2604 OID 19067)
+-- Name: commande numero; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.commande ALTER COLUMN numero SET DEFAULT nextval('public.commande_numero_seq'::regclass);
+
+
+--
+-- TOC entry 3236 (class 2604 OID 19108)
+-- Name: image_pizza id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.image_pizza ALTER COLUMN id SET DEFAULT nextval('public.image_pizza_id_seq'::regclass);
+
+
+--
+-- TOC entry 3235 (class 2604 OID 19089)
+-- Name: ingredient id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ingredient ALTER COLUMN id SET DEFAULT nextval('public.ingredient_id_seq'::regclass);
+
+
+--
+-- TOC entry 3227 (class 2604 OID 18944)
+-- Name: jour_ouvrable id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.jour_ouvrable ALTER COLUMN id SET DEFAULT nextval('public.jour_ouvrable_id_seq'::regclass);
+
+
+--
+-- TOC entry 3233 (class 2604 OID 19046)
+-- Name: panier id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.panier ALTER COLUMN id SET DEFAULT nextval('public.panier_id_seq'::regclass);
+
+
+--
+-- TOC entry 3228 (class 2604 OID 18955)
+-- Name: pizza id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pizza ALTER COLUMN id SET DEFAULT nextval('public.pizza_id_seq'::regclass);
+
+
+--
+-- TOC entry 3231 (class 2604 OID 18988)
+-- Name: pizzeria id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pizzeria ALTER COLUMN id SET DEFAULT nextval('public.pizzeria_id_seq'::regclass);
+
+
+--
+-- TOC entry 3232 (class 2604 OID 19002)
+-- Name: utilisateur id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.utilisateur ALTER COLUMN id SET DEFAULT nextval('public.utilisateur_id_seq'::regclass);
+
+
+--
+-- TOC entry 3451 (class 0 OID 18974)
+-- Dependencies: 207
+-- Data for Name: adresse; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.adresse (id, teritoire, ville, rue, code_postal, num_batiment, pays) FROM stdin;
+1	QUEBEC	Montréal	54 RUE other DB	H5J 1A3	353	CANADA
+2	QUEBEC	Longueil	45 RUELLE TEST DB	C5J 9Y3	353	CANADA
+3	QUEBEC	Sherbrooke	434 RUE  DB	G5J 2Y3	353	CANADA
+4	QUEBEC	drummondville	84 RUE Basededonne DB	N5J 9Y3	353	CANADA
+5	QUEBEC	Chicoutimi	454 RUE TEST DB	G5J 1B3	353	CANADA
+6	QUEBEC	Boucherville	454 RUE TEST DB	?5J HY3	353	CANADA
+7	QUEBEC	Brossard	1054 RUELLe DATABASE DB	G5J 1Y3	353	CANADA
+8	QUEBEC	Québec	454 RUE TEST DB	G9J 1P3	353	CANADA
+9	ONTARIO	Ville	85 RUELLE TOST BD	G8J 1JH	53	CANADA
+\.
+
+
+--
+-- TOC entry 3449 (class 0 OID 18963)
+-- Dependencies: 205
+-- Data for Name: aide_memoire; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.aide_memoire (id, pizza_id, nom, contenu) FROM stdin;
+1	1	Aide-memoire-1	Verrrryyy Long description Verrrryyy Long description...1
+2	2	Aide-memoire-2	Verrrryyy Long description Verrrryyy Long description...2
+\.
+
+
+--
+-- TOC entry 3465 (class 0 OID 19054)
+-- Dependencies: 221
+-- Data for Name: carte_credit; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.carte_credit (numero, annee_expiration, mois_expiration, nom_proprietaire, client_id) FROM stdin;
+4042546423356547	2030	2	Steeve Jobs	4
+4042777773356547	2026	8	Steeve Voz	7
+4042555553356547	2030	2	Steeve Jobs	4
+\.
+
+
+--
+-- TOC entry 3461 (class 0 OID 19035)
+-- Dependencies: 217
+-- Data for Name: client; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.client (utilisateur_id) FROM stdin;
+4
+7
+\.
+
+
+--
+-- TOC entry 3467 (class 0 OID 19064)
+-- Dependencies: 223
+-- Data for Name: commande; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.commande (numero, date_heure, pizzeria_id, prix_total_ttc, etat, adresse_id, client_id, pizzaiolo_id) FROM stdin;
+1	2021-05-12 11:28:50.095486	1	76	0	1	4	8
+2	2021-05-12 11:28:50.095486	1	37	5	3	7	1
+3	2021-05-12 11:28:50.095486	1	176	2	6	4	8
+\.
+
+
+--
+-- TOC entry 3464 (class 0 OID 19049)
+-- Dependencies: 220
+-- Data for Name: element_panier; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.element_panier (panier_id, pizza_id, quantite) FROM stdin;
+2	1	3
+1	1	8
+1	2	1
+\.
+
+
+--
+-- TOC entry 3475 (class 0 OID 19105)
+-- Dependencies: 231
+-- Data for Name: image_pizza; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.image_pizza (id, url, pizza_id) FROM stdin;
+1	oc_pizza.com/images/pizza_1	1
+2	oc_pizza.com/images/pizza_2	2
+\.
+
+
+--
+-- TOC entry 3471 (class 0 OID 19086)
+-- Dependencies: 227
+-- Data for Name: ingredient; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.ingredient (id, nom, description) FROM stdin;
+1	farine	just flourrrr....
+2	sel	just salt....
+\.
+
+
+--
+-- TOC entry 3473 (class 0 OID 19098)
+-- Dependencies: 229
+-- Data for Name: ingredient_pizza_association; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.ingredient_pizza_association (pizza_id, ingredient_id) FROM stdin;
+1	2
+2	1
+\.
+
+
+--
+-- TOC entry 3445 (class 0 OID 18941)
+-- Dependencies: 201
+-- Data for Name: jour_ouvrable; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.jour_ouvrable (id, jour, heure_ouverture, heure_fermeture) FROM stdin;
+1	Lundi	08:00:00	16:30:00
+2	Lundi	07:00:00	17:00:00
+3	Mardi	07:00:00	17:00:00
+4	Mercredi	07:00:00	17:00:00
+5	Jeudi	07:00:00	17:00:00
+6	Samedi	10:00:00	15:00:00
+7	Vendredi	08:00:00	16:30:00
+\.
+
+
+--
+-- TOC entry 3468 (class 0 OID 19071)
+-- Dependencies: 224
+-- Data for Name: ligne_commande; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.ligne_commande (pizza_id, commande_numero, quantite) FROM stdin;
+2	1	3
+1	1	1
+2	2	3
+1	3	2
+\.
+
+
+--
+-- TOC entry 3469 (class 0 OID 19076)
+-- Dependencies: 225
+-- Data for Name: livraison; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.livraison (commande_numero, livreur_id, date_heure, etat, instruction) FROM stdin;
+1	3	2021-05-12 11:28:50.095486	0	Frappez à la porte arrière
+2	5	2021-05-12 11:28:50.095486	1	Laissez devant la porte
+3	3	2021-05-12 11:28:50.095486	0	Manger la, cest cadeaux...
+\.
+
+
+--
+-- TOC entry 3459 (class 0 OID 19020)
+-- Dependencies: 215
+-- Data for Name: livreur; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.livreur (utilisateur_id, url_photo_permis_conduire, total_livraison_effectuee) FROM stdin;
+5	photo.url.permis@oc_pizza.com	8
+3	static.files.permis@oc_pizza.com	31
+\.
+
+
+--
+-- TOC entry 3463 (class 0 OID 19043)
+-- Dependencies: 219
+-- Data for Name: panier; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.panier (id, client_id) FROM stdin;
+1	4
+2	7
+\.
+
+
+--
+-- TOC entry 3447 (class 0 OID 18952)
+-- Dependencies: 203
+-- Data for Name: pizza; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.pizza (id, nom, description, prix) FROM stdin;
+1	The pizza	The best description ever...	32.00
+2	Expensive pizza	A description for the expensive pizza...	352.00
+\.
+
+
+--
+-- TOC entry 3460 (class 0 OID 19029)
+-- Dependencies: 216
+-- Data for Name: pizzaiolo; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.pizzaiolo (utilisateur_id, total_commande_preparee) FROM stdin;
+1	46
+8	13
+\.
+
+
+--
+-- TOC entry 3453 (class 0 OID 18985)
+-- Dependencies: 209
+-- Data for Name: pizzeria; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.pizzeria (id, adresse_id, taux_tax) FROM stdin;
+1	1	15.000
+2	2	15.000
+\.
+
+
+--
+-- TOC entry 3454 (class 0 OID 18992)
+-- Dependencies: 210
+-- Data for Name: pizzeria_jour_ouvrable; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.pizzeria_jour_ouvrable (pizzeria_id, jour_ouvrable_id) FROM stdin;
+1	1
+1	3
+1	4
+1	5
+1	6
+1	7
+2	2
+2	3
+2	4
+2	5
+2	6
+2	7
+\.
+
+
+--
+-- TOC entry 3457 (class 0 OID 19009)
+-- Dependencies: 213
+-- Data for Name: responsable; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.responsable (utilisateur_id) FROM stdin;
+2
+6
+\.
+
+
+--
+-- TOC entry 3458 (class 0 OID 19015)
+-- Dependencies: 214
+-- Data for Name: responsable_privilegie; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.responsable_privilegie (responsable_id) FROM stdin;
+6
+\.
+
+
+--
+-- TOC entry 3472 (class 0 OID 19095)
+-- Dependencies: 228
+-- Data for Name: stock; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.stock (pizzeria_id, ingredient_id, quantite) FROM stdin;
+2	1	1155
+1	1	617
+2	2	900
+1	2	1342
+\.
+
+
+--
+-- TOC entry 3456 (class 0 OID 18999)
+-- Dependencies: 212
+-- Data for Name: utilisateur; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.utilisateur (id, nom, prenom, email, adresse_id, numero_telephone, pizzeria_id) FROM stdin;
+1	Musk	Elun	database@ocpizza.shop	1	5817008257	2
+2	Musk	Elun	test@ocpizza.shop	2	5817008257	2
+3	Tesla	Nikola	nik@ocpizza.shop	3	4587208257	1
+4	Musk	Elun	ariel@ocpizza.shop	4	5817008257	1
+5	Einstein	Albert	naruto@ocpizza.shop	5	5817008257	2
+6	Berete	Sita	onepice@ocpizza.shop	6	5817008257	2
+7	Musk	Elun	attack@ocpizza.shop	7	5817008257	1
+8	Einstein	Albert	on_titan@ocpizza.shop	8	5817008257	2
+\.
+
+
+--
+-- TOC entry 3491 (class 0 OID 0)
+-- Dependencies: 206
+-- Name: adresse_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.adresse_id_seq', 9, true);
+
+
+--
+-- TOC entry 3492 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: aide_memoire_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.aide_memoire_id_seq', 2, true);
+
+
+--
+-- TOC entry 3493 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: commande_numero_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.commande_numero_seq', 3, true);
+
+
+--
+-- TOC entry 3494 (class 0 OID 0)
+-- Dependencies: 230
+-- Name: image_pizza_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.image_pizza_id_seq', 2, true);
+
+
+--
+-- TOC entry 3495 (class 0 OID 0)
+-- Dependencies: 226
+-- Name: ingredient_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.ingredient_id_seq', 2, true);
+
+
+--
+-- TOC entry 3496 (class 0 OID 0)
+-- Dependencies: 200
+-- Name: jour_ouvrable_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.jour_ouvrable_id_seq', 7, true);
+
+
+--
+-- TOC entry 3497 (class 0 OID 0)
+-- Dependencies: 218
+-- Name: panier_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.panier_id_seq', 2, true);
+
+
+--
+-- TOC entry 3498 (class 0 OID 0)
+-- Dependencies: 202
+-- Name: pizza_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.pizza_id_seq', 2, true);
+
+
+--
+-- TOC entry 3499 (class 0 OID 0)
+-- Dependencies: 208
+-- Name: pizzeria_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.pizzeria_id_seq', 2, true);
+
+
+--
+-- TOC entry 3500 (class 0 OID 0)
+-- Dependencies: 211
+-- Name: utilisateur_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.utilisateur_id_seq', 8, true);
+
+
+--
+-- TOC entry 3244 (class 2606 OID 18982)
+-- Name: adresse adresse_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.adresse
+    ADD CONSTRAINT adresse_pk PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3242 (class 2606 OID 18971)
+-- Name: aide_memoire aide_memoire_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.aide_memoire
+    ADD CONSTRAINT aide_memoire_pk PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3272 (class 2606 OID 19061)
+-- Name: carte_credit carte_credit_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.carte_credit
+    ADD CONSTRAINT carte_credit_pk PRIMARY KEY (numero);
+
+
+--
+-- TOC entry 3266 (class 2606 OID 19039)
+-- Name: client client_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.client
+    ADD CONSTRAINT client_pk PRIMARY KEY (utilisateur_id);
+
+
+--
+-- TOC entry 3275 (class 2606 OID 19069)
+-- Name: commande commande_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.commande
+    ADD CONSTRAINT commande_pk PRIMARY KEY (numero);
+
+
+--
+-- TOC entry 3270 (class 2606 OID 19053)
+-- Name: element_panier element_panier_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.element_panier
+    ADD CONSTRAINT element_panier_pk PRIMARY KEY (panier_id, pizza_id);
+
+
+--
+-- TOC entry 3285 (class 2606 OID 19113)
+-- Name: image_pizza image_pizza_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.image_pizza
+    ADD CONSTRAINT image_pizza_pk PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3283 (class 2606 OID 19102)
+-- Name: ingredient_pizza_association ingredient_pizza_association_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ingredient_pizza_association
+    ADD CONSTRAINT ingredient_pizza_association_pk PRIMARY KEY (pizza_id, ingredient_id);
+
+
+--
+-- TOC entry 3281 (class 2606 OID 19094)
+-- Name: ingredient ingredient_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ingredient
+    ADD CONSTRAINT ingredient_pk PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3238 (class 2606 OID 18949)
+-- Name: jour_ouvrable jour_ouvrable_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.jour_ouvrable
+    ADD CONSTRAINT jour_ouvrable_pk PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3277 (class 2606 OID 19075)
+-- Name: ligne_commande ligne_commande_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ligne_commande
+    ADD CONSTRAINT ligne_commande_pk PRIMARY KEY (pizza_id, commande_numero);
+
+
+--
+-- TOC entry 3279 (class 2606 OID 19083)
+-- Name: livraison livraison_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.livraison
+    ADD CONSTRAINT livraison_pk PRIMARY KEY (commande_numero, livreur_id);
+
+
+--
+-- TOC entry 3260 (class 2606 OID 19027)
+-- Name: livreur livreur_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.livreur
+    ADD CONSTRAINT livreur_pk PRIMARY KEY (utilisateur_id);
+
+
+--
+-- TOC entry 3268 (class 2606 OID 19048)
+-- Name: panier panier_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.panier
+    ADD CONSTRAINT panier_pk PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3240 (class 2606 OID 18960)
+-- Name: pizza pizza_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pizza
+    ADD CONSTRAINT pizza_pk PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3263 (class 2606 OID 19033)
+-- Name: pizzaiolo pizzaiolo_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pizzaiolo
+    ADD CONSTRAINT pizzaiolo_pk PRIMARY KEY (utilisateur_id);
+
+
+--
+-- TOC entry 3249 (class 2606 OID 18996)
+-- Name: pizzeria_jour_ouvrable pizzeria_jour_ouvrable_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pizzeria_jour_ouvrable
+    ADD CONSTRAINT pizzeria_jour_ouvrable_pk PRIMARY KEY (pizzeria_id, jour_ouvrable_id);
+
+
+--
+-- TOC entry 3247 (class 2606 OID 18990)
+-- Name: pizzeria pizzeria_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pizzeria
+    ADD CONSTRAINT pizzeria_pk PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3255 (class 2606 OID 19013)
+-- Name: responsable responsable_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.responsable
+    ADD CONSTRAINT responsable_pk PRIMARY KEY (utilisateur_id);
+
+
+--
+-- TOC entry 3257 (class 2606 OID 19019)
+-- Name: responsable_privilegie responsable_privilegie_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.responsable_privilegie
+    ADD CONSTRAINT responsable_privilegie_pk PRIMARY KEY (responsable_id);
+
+
+--
+-- TOC entry 3252 (class 2606 OID 19007)
+-- Name: utilisateur utilisateur_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.utilisateur
+    ADD CONSTRAINT utilisateur_pk PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3264 (class 1259 OID 19040)
+-- Name: client_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX client_idx ON public.client USING btree (utilisateur_id);
+
+
+--
+-- TOC entry 3273 (class 1259 OID 19070)
+-- Name: commande_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX commande_idx ON public.commande USING btree (adresse_id);
+
+
+--
+-- TOC entry 3258 (class 1259 OID 19028)
+-- Name: livreur_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX livreur_idx ON public.livreur USING btree (utilisateur_id);
+
+
+--
+-- TOC entry 3261 (class 1259 OID 19034)
+-- Name: pizzaiolo_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX pizzaiolo_idx ON public.pizzaiolo USING btree (utilisateur_id);
+
+
+--
+-- TOC entry 3245 (class 1259 OID 18991)
+-- Name: pizzeria_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX pizzeria_idx ON public.pizzeria USING btree (adresse_id);
+
+
+--
+-- TOC entry 3253 (class 1259 OID 19014)
+-- Name: responsable_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX responsable_idx ON public.responsable USING btree (utilisateur_id);
+
+
+--
+-- TOC entry 3250 (class 1259 OID 19008)
+-- Name: utilisateur_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX utilisateur_idx ON public.utilisateur USING btree (adresse_id);
+
+
+--
+-- TOC entry 3301 (class 2606 OID 19144)
+-- Name: commande adresse_commande_fk1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.commande
+    ADD CONSTRAINT adresse_commande_fk1 FOREIGN KEY (adresse_id) REFERENCES public.adresse(id) ON DELETE SET NULL;
+
+
+--
+-- TOC entry 3287 (class 2606 OID 19154)
+-- Name: pizzeria adresse_pizzeria_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pizzeria
+    ADD CONSTRAINT adresse_pizzeria_fk FOREIGN KEY (adresse_id) REFERENCES public.adresse(id);
+
+
+--
+-- TOC entry 3290 (class 2606 OID 19149)
+-- Name: utilisateur adresse_utilisateur_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.utilisateur
+    ADD CONSTRAINT adresse_utilisateur_fk FOREIGN KEY (adresse_id) REFERENCES public.adresse(id);
+
+
+--
+-- TOC entry 3300 (class 2606 OID 19219)
+-- Name: carte_credit client_carte_credit_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.carte_credit
+    ADD CONSTRAINT client_carte_credit_fk FOREIGN KEY (client_id) REFERENCES public.client(utilisateur_id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3304 (class 2606 OID 19214)
+-- Name: commande client_commande_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.commande
+    ADD CONSTRAINT client_commande_fk FOREIGN KEY (client_id) REFERENCES public.client(utilisateur_id) ON DELETE SET NULL;
+
+
+--
+-- TOC entry 3297 (class 2606 OID 19224)
+-- Name: panier client_panier_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.panier
+    ADD CONSTRAINT client_panier_fk FOREIGN KEY (client_id) REFERENCES public.client(utilisateur_id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3306 (class 2606 OID 19239)
+-- Name: ligne_commande commande_ligne_commande_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ligne_commande
+    ADD CONSTRAINT commande_ligne_commande_fk FOREIGN KEY (commande_numero) REFERENCES public.commande(numero) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3308 (class 2606 OID 19234)
+-- Name: livraison commande_livraison_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.livraison
+    ADD CONSTRAINT commande_livraison_fk FOREIGN KEY (commande_numero) REFERENCES public.commande(numero);
+
+
+--
+-- TOC entry 3312 (class 2606 OID 19244)
+-- Name: ingredient_pizza_association ingredient_ingredient_pizza_ass_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ingredient_pizza_association
+    ADD CONSTRAINT ingredient_ingredient_pizza_ass_fk FOREIGN KEY (ingredient_id) REFERENCES public.ingredient(id) ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 3310 (class 2606 OID 19249)
+-- Name: stock ingredient_stock_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.stock
+    ADD CONSTRAINT ingredient_stock_fk FOREIGN KEY (ingredient_id) REFERENCES public.ingredient(id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3288 (class 2606 OID 19114)
+-- Name: pizzeria_jour_ouvrable jour_ouvrable_pizzeria_jour_ouvrable_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pizzeria_jour_ouvrable
+    ADD CONSTRAINT jour_ouvrable_pizzeria_jour_ouvrable_fk FOREIGN KEY (jour_ouvrable_id) REFERENCES public.jour_ouvrable(id);
+
+
+--
+-- TOC entry 3307 (class 2606 OID 19204)
+-- Name: livraison livreur_livraison_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.livraison
+    ADD CONSTRAINT livreur_livraison_fk FOREIGN KEY (livreur_id) REFERENCES public.livreur(utilisateur_id) ON DELETE SET NULL;
+
+
+--
+-- TOC entry 3299 (class 2606 OID 19229)
+-- Name: element_panier panier_element_panier_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.element_panier
+    ADD CONSTRAINT panier_element_panier_fk FOREIGN KEY (panier_id) REFERENCES public.panier(id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3286 (class 2606 OID 19119)
+-- Name: aide_memoire pizza_aide_memoire_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.aide_memoire
+    ADD CONSTRAINT pizza_aide_memoire_fk FOREIGN KEY (pizza_id) REFERENCES public.pizza(id);
+
+
+--
+-- TOC entry 3298 (class 2606 OID 19134)
+-- Name: element_panier pizza_element_panier_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.element_panier
+    ADD CONSTRAINT pizza_element_panier_fk FOREIGN KEY (pizza_id) REFERENCES public.pizza(id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3313 (class 2606 OID 19124)
+-- Name: image_pizza pizza_image_pizza_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.image_pizza
+    ADD CONSTRAINT pizza_image_pizza_fk FOREIGN KEY (pizza_id) REFERENCES public.pizza(id);
+
+
+--
+-- TOC entry 3311 (class 2606 OID 19129)
+-- Name: ingredient_pizza_association pizza_ingredient_pizza_ass_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ingredient_pizza_association
+    ADD CONSTRAINT pizza_ingredient_pizza_ass_fk FOREIGN KEY (pizza_id) REFERENCES public.pizza(id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3305 (class 2606 OID 19139)
+-- Name: ligne_commande pizza_ligne_commande_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ligne_commande
+    ADD CONSTRAINT pizza_ligne_commande_fk FOREIGN KEY (pizza_id) REFERENCES public.pizza(id);
+
+
+--
+-- TOC entry 3303 (class 2606 OID 19209)
+-- Name: commande pizzaiolo_commande_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.commande
+    ADD CONSTRAINT pizzaiolo_commande_fk FOREIGN KEY (pizzaiolo_id) REFERENCES public.pizzaiolo(utilisateur_id) ON DELETE SET NULL;
+
+
+--
+-- TOC entry 3302 (class 2606 OID 19159)
+-- Name: commande pizzeria_commande_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.commande
+    ADD CONSTRAINT pizzeria_commande_fk FOREIGN KEY (pizzeria_id) REFERENCES public.pizzeria(id) ON DELETE SET NULL;
+
+
+--
+-- TOC entry 3289 (class 2606 OID 19164)
+-- Name: pizzeria_jour_ouvrable pizzeria_pizzeria_jour_ouvrable_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pizzeria_jour_ouvrable
+    ADD CONSTRAINT pizzeria_pizzeria_jour_ouvrable_fk FOREIGN KEY (pizzeria_id) REFERENCES public.pizzeria(id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3309 (class 2606 OID 19169)
+-- Name: stock pizzeria_stock_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.stock
+    ADD CONSTRAINT pizzeria_stock_fk FOREIGN KEY (pizzeria_id) REFERENCES public.pizzeria(id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3291 (class 2606 OID 19174)
+-- Name: utilisateur pizzeria_utilisateur_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.utilisateur
+    ADD CONSTRAINT pizzeria_utilisateur_fk FOREIGN KEY (pizzeria_id) REFERENCES public.pizzeria(id);
+
+
+--
+-- TOC entry 3293 (class 2606 OID 19199)
+-- Name: responsable_privilegie responsable_responsable_privilegie_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.responsable_privilegie
+    ADD CONSTRAINT responsable_responsable_privilegie_fk FOREIGN KEY (responsable_id) REFERENCES public.responsable(utilisateur_id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3296 (class 2606 OID 19179)
+-- Name: client utilisateur_client_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.client
+    ADD CONSTRAINT utilisateur_client_fk FOREIGN KEY (utilisateur_id) REFERENCES public.utilisateur(id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3294 (class 2606 OID 19189)
+-- Name: livreur utilisateur_livreur_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.livreur
+    ADD CONSTRAINT utilisateur_livreur_fk FOREIGN KEY (utilisateur_id) REFERENCES public.utilisateur(id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3295 (class 2606 OID 19184)
+-- Name: pizzaiolo utilisateur_pizzaiolo_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pizzaiolo
+    ADD CONSTRAINT utilisateur_pizzaiolo_fk FOREIGN KEY (utilisateur_id) REFERENCES public.utilisateur(id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3292 (class 2606 OID 19194)
+-- Name: responsable utilisateur_responsable_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.responsable
+    ADD CONSTRAINT utilisateur_responsable_fk FOREIGN KEY (utilisateur_id) REFERENCES public.utilisateur(id) ON DELETE CASCADE;
+
+
+-- Completed on 2021-05-12 11:55:33 EDT
+
+--
+-- PostgreSQL database dump complete
+--
+

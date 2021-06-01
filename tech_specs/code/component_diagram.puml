@@ -1,0 +1,38 @@
+@startuml
+
+skinparam nodesep 100
+
+component Backend {
+
+    port " " as paymentAPI
+
+    [Gestionnaire de compte] as accountManager
+    [Authentification] as auth
+    [Système de commande] as orderSys
+    [Système de paiement] as paymentSys
+    [Gestionnaire de commande] as orderManager
+    [Gestionnaire de livraison] as deliveryManager
+
+    auth .> accountManager
+
+    orderSys -( Paiement
+    Paiement - paymentSys
+    orderSys ...> orderManager
+
+    orderManager <. deliveryManager
+
+    paymentAPI - PAIEMENT
+    PAIEMENT )-- paymentSys
+
+    orderManager -[hidden]- auth
+
+    port " " as authPort
+    port " " as authPorlt
+    auth -- authPort
+}
+
+ APIDePaiement )-- paymentAPI
+
+ authPort <.- [Frontend de l'application des pizzaiolos]
+
+@enduml

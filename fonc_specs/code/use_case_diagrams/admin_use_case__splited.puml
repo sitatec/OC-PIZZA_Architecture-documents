@@ -1,0 +1,189 @@
+@startuml
+skinparam dpi 800
+left to right direction
+
+actor Responsable
+actor "Responsable Privilégié" as superUser
+
+rectangle "Espace d'administration | Gestion des PIZZAS" {
+    usecase (Créer l'aide-mémoire d'une pizza) as createMem_aid
+    usecase (Modifier l'aide-mémoire d'une pizza) as editMem_aid
+    usecase (Supprimer l'aide-mémoire d'une pizza) as deleteMem_aid
+    usecase (Créer une pizza) as createPizza
+    usecase (Afficher la liste de toutes les pizza) as showAllPizza
+    usecase (Supprimer une pizza) as deletePizza
+    usecase (Modifier une pizza) as editPizza
+    usecase (Afficher les détails d'une pizza) as showPizzaDetails
+    usecase (Se Connecter) as login
+
+    note right of login
+        Tous les cas d'utilisation requièrent que l'utilisateur soit connecté.
+        Les contraintes <<includes>> sont volontairement omises pour la
+        lisibilité du diagramme.
+    end note
+}
+
+Responsable -- login
+Responsable -- createPizza
+Responsable -- showAllPizza
+Responsable -- editPizza
+Responsable -- deletePizza
+Responsable -- showPizzaDetails
+
+
+createPizza ..> createMem_aid : <<includes>>
+deletePizza <.. deleteMem_aid : <<extends>>
+editPizza <.. editMem_aid : <<extends>>
+
+Responsable <- superUser
+
+@enduml
+
+
+
+@startuml
+
+skinparam dpi 800
+left to right direction
+
+actor Responsable
+actor "Responsable Privilégié" as superUser
+
+rectangle "Espace d'administration | Gestion des Pizzerias" {
+    usecase (Afficher les détails d'une pizzeria) as showPizzeriaDetails
+    usecase (Afficher les statistiques d'une pizzeria: \n par jour/semaine/mois/année) as showPizzeriaStats
+    usecase (Afficher la liste des pizzerias) as showPizzerias
+    usecase (Modifier les informations d'une pizzeria) as editPizzeriaInfo
+    usecase (Ajouter une pizzeria) as createPizzeria
+    usecase (Supprimer une pizzeria) as removePizzeria
+    usecase (Se Connecter) as login
+}
+
+Responsable -- showPizzeriaDetails
+Responsable -- showPizzeriaStats
+Responsable -- editPizzeriaInfo
+Responsable -- showPizzerias
+
+superUser -- createPizzeria
+superUser -- removePizzeria
+
+showPizzeriaDetails ..> login : <<includes>>
+showPizzeriaStats ..> login : <<includes>>
+editPizzeriaInfo ..> login : <<includes>>
+showPizzerias ..> login : <<includes>>
+createPizzeria ..> login : <<includes>>
+removePizzeria ..> login : <<includes>>
+
+Responsable <- superUser
+@enduml
+
+
+
+@startuml
+
+skinparam ranksep 150
+skinparam dpi 800
+left to right direction
+
+actor Responsable
+actor "Responsable Privilégié" as superUser
+
+rectangle "Espace d'administration | Gestion des commandes et du stock" {
+    usecase (Afficher la liste de toutes les commandes) as showAllOrders
+    usecase (Afficher les commandes en attente de livraison) as showOrdersWaitingForDelivery
+    usecase (Afficher la liste des commandes en cours de livraison) as showOrdersInDeliveringProcess
+    usecase (Afficher la liste des commandes en cours de préparation) as showOrdersInCookingProcess
+    usecase (Afficher les commandes livrées) as showDeliveredOrders
+    usecase (Afficher la liste des commandes annulées) as showCanceledOrders
+    usecase (Supprimer une commande) as deleteOrder
+    usecase (Modifier une commande) as editOrder
+    usecase (Afficher les commandes) as showOrders
+    usecase (Annuler une commande) as cancelOrder
+    usecase (Vérifier les stocks) as checkStock
+    usecase (Mettre à jour les stocks) as updateStock
+    usecase (Se Connecter) as login
+
+     note right of login
+        Tous les cas d'utilisation requièrent que l'utilisateur soit connecté.
+        Les contraintes <<includes>> sont volontairement omises pour la
+        lisibilité du diagramme.
+    end note
+}
+
+Responsable -- login
+Responsable -- checkStock
+Responsable -- updateStock
+
+Responsable -- editOrder
+Responsable -- deleteOrder
+Responsable -- cancelOrder
+Responsable -- showOrders
+
+showOrders <-- showAllOrders
+showOrders <-- showOrdersInDeliveringProcess
+showOrders <-- showCanceledOrders
+showOrders <-- showOrdersInDeliveringProcess
+showOrders <-- showOrdersInCookingProcess
+showOrders <-- showDeliveredOrders
+showOrders <-- showOrdersWaitingForDelivery
+
+Responsable <- superUser
+@enduml
+
+
+@startuml
+
+skinparam ranksep 100
+skinparam dpi 800
+left to right direction
+
+actor Responsable
+actor "Responsable Privilégié" as superUser
+
+rectangle "Espace d'administration | Gestion des Utilisateurs" {
+    usecase (Se Connecter) as login
+    usecase (Créer un compte Pizzaiolo) as createPizzaioloAccount
+    usecase (Gérer un compte Utilisateur) as manageUserAccount
+    usecase (Supprimer le compte d'un Utilisateur) as deleteUerAccount
+    usecase (Modifier les informations d'un Utilisateur) as editUserInfo
+    usecase (Bloqué le compte d'un Utilisateur) as blockUser
+    usecase (Débloqué le compte d'un Utilisateur) as unblockUser
+    usecase (Afficher la liste des Pizzaiolo) as showPizzaiolos
+    usecase (Afficher la liste des Livreurs) as showDelivers
+    usecase (Afficher la liste des Clients) as showClients
+    usecase (Afficher la liste des Responsables) as showResponsables
+    usecase (Créer un compte Responsable) as createResponsableAccount
+    usecase (Afficher la liste des utilisateurs) as showUsers
+    usecase (Créer un compte Livreur) as createDeliverAccount
+
+     note right of login
+        Tous les cas d'utilisation requièrent que l'utilisateur soit connecté.
+        Les contraintes <<includes>> sont volontairement omises pour la
+        lisibilité du diagramme.
+    end note
+}
+
+Responsable -- login
+Responsable -- manageUserAccount
+Responsable -- showUsers
+
+superUser -- createResponsableAccount
+superUser -- showResponsables
+
+showUsers <-- showPizzaiolos
+showUsers <-- showDelivers
+showUsers <-- showClients
+
+manageUserAccount <-- deleteUerAccount
+manageUserAccount <-- editUserInfo
+manageUserAccount <-- blockUser
+manageUserAccount <-- unblockUser
+
+Responsable -- createDeliverAccount
+Responsable -- createPizzaioloAccount
+
+Responsable <- superUser
+
+@enduml
+
+

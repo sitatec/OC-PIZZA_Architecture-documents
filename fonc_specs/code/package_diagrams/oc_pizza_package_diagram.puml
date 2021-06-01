@@ -1,0 +1,43 @@
+@startuml
+skinparam dpi 800
+actor Visiteur
+actor Client
+actor Livreur
+actor Pizzaiolo
+actor Responsable
+actor "API de paiement" as payment_api
+
+left to right direction
+
+rectangle "Système de Gestion de Pizzeria OC PIZZA" #F1F1F1 {
+    package "Espace d'administration"
+    package "Application pour les Pizzaiolo"
+    package "Application pour les Livreurs"
+    package Backend #00 {
+        package "Système de Gestion de Livraison"
+        package "Système de Gestion de stocks"
+        package "Système de Gestion de Commande"
+        package "Système de Commande"
+        package "Système de paiement"
+    }
+    package "Site Web"
+}
+
+(Site Web) ..> Backend : <<use>>
+(Application pour les Pizzaiolo) ..> (Système de Gestion de Commande) : <<use>>
+(Espace d'administration) ..> Backend : <<use>>
+(Application pour les Livreurs) ..> (Système de Gestion de Livraison) : <<use>>
+(Application pour les Pizzaiolo) ..> (Système de Gestion de stocks) : <<use>>
+
+Visiteur -- (Site Web)
+Client -- (Site Web)
+Livreur -- (Application pour les Livreurs)
+Responsable -- (Espace d'administration)
+Pizzaiolo -- (Application pour les Pizzaiolo)
+
+(Système de paiement) -- payment_api
+
+(Système de Commande) -> (Système de paiement) : <<use>>
+(Système de Gestion de Commande) <-- (Système de Commande) : <<use>>
+
+@enduml

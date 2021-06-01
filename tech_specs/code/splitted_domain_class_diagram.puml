@@ -1,0 +1,202 @@
+@startuml
+
+left to right direction
+
+skinparam nodesep 100
+
+package "Domain Fonctionnel"  {
+
+    class CarteCredit {
+        numero : int
+        moisExpiration : int
+        anneeExpiration : int
+        nomProprietaire : string
+    }
+
+    class Panier {
+        prixTotal : float
+        nombrePizza : int
+    }
+
+    class Adresse {
+        pays : string
+        codePostal : string
+        ville : string
+        rue : string
+        teritoire : string
+        numBatiment : int
+    }
+
+    class Commande {
+        numero : int
+        dateHeure : DateTime
+        pizzeria : Pizzeria
+        prixTTC : float
+        prixHT : float
+        quantiteTotal : int
+        etat : enum
+    }
+
+    class Pizza {
+        nom : string
+        description : string
+        prix : float
+    }
+
+    class AideMemoire {
+        nom : string
+        contenu : string
+    }
+
+    class Ingredient {
+        nom : string
+        description : string
+    }
+
+    class Livraison {
+        dateHeure : DateTime
+        etat : enum
+        instruction : string
+    }
+
+    class Pizzeria {
+        tauxTax : float
+        nombreEmployee : int
+        adresse : Adresse
+    }
+
+    class JourOuvrable {
+        jour : string
+        heureOuverture : int
+        heureFermeture : int
+    }
+
+    class ImagePizza {
+        url : string
+    }
+
+    class ElementPanier {
+    }
+
+    class LigneCommande {
+
+    }
+
+    class Stock {
+        quantite : int
+    }
+
+    abstract class PizzaQuantifiable {
+        quantite : int
+        prixTotal : float
+        prixUnitaire : float
+    }
+    class Livreur {
+        UrlPhotoPermisConduire : string
+        totaleLivraisonEffectuee : int
+    }
+
+    class Pizzaiolo {
+        totaleCommandePreparee : int
+    }
+
+    class Responsable {
+    }
+
+    class Client {
+    }
+
+    abstract class Employee {
+        pizzeria : Pizzeria
+    }
+
+    abstract class Utilisateur {
+        nom : string
+        prenom : string
+        email : string
+        numeroDeTelephone : int
+    }
+
+    Pizza "*" --o "*" Panier
+    (Pizza, Panier) . ElementPanier
+
+    Commande "*" o- "1..*" Pizza
+    (Commande, Pizza) . LigneCommande
+    Pizzaiolo "1" -- "*" Commande
+
+    ElementPanier --|> PizzaQuantifiable
+    LigneCommande --|> PizzaQuantifiable
+    Client "1" - "1" Panier
+
+    CarteCredit "0..2" - "1" Client
+
+    Utilisateur "1" -- "*" Adresse
+    Adresse "1..2" -- "*" Commande
+    Commande "*" ---- "1" Client
+
+    Pizzeria "1" - "1" Responsable
+    JourOuvrable "0..7" - "1..*" Pizzeria
+
+    Pizza "1" - "1" AideMemoire
+    Ingredient "3..*" --* "1..*" Pizza
+    ImagePizza "1..*" -- "1" Pizza
+
+    Livreur "1" - "*" Commande
+    (Livreur, Commande) . Livraison
+
+    Pizzeria "1..*" -- "*" Ingredient
+    (Pizzeria, Ingredient) . Stock
+
+    Pizzeria "1" --- "2..*" Employee
+}
+
+
+
+@enduml
+
+
+
+@startuml
+
+skinparam nodesep 90
+skinparam ranksep 90
+
+package "Domain Fonctionnel | Acteurs" {
+
+    abstract class Utilisateur {
+        nom : string
+        prenom : string
+        email : string
+        numeroDeTelephone : int
+    }
+
+    class Livreur {
+        UrlPhotoPermisConduire : string
+        totaleLivraisonEffectuee : int
+    }
+
+    class Pizzaiolo {
+        totaleCommandePreparee : int
+    }
+
+    class Responsable {
+    }
+
+    class ResponsablePrivilegie {
+    }
+
+    class Client {
+    }
+
+    class Employee {
+        lieuTravail : Pizzeria
+    }
+}
+
+Client --|> Utilisateur
+Responsable <|-- ResponsablePrivilegie
+Responsable -l-|> Utilisateur
+Livreur --|> Employee
+Employee <|-- Pizzaiolo
+Employee -|> Utilisateur
+@enduml

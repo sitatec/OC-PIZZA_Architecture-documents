@@ -1,0 +1,48 @@
+@startuml
+
+left to right direction
+skinparam nodesep 150
+
+cloud "Google Cloud Platform"{
+
+    node AppEngine <<Service>>{
+        [Backend]
+    }
+    node CloudSQL <<Service>>{
+        database PostgreSQL {
+        }
+    }
+
+
+    UnixSocket )-- Backend
+    PostgreSQL -- UnixSocket
+
+}
+
+    node "Telephone Android" <<Device>> {
+        component "Application Livreur" as android_l
+    }
+
+    node "Tablette Android" <<Device>> {
+        component "Application Pizzaiolo" as android_p
+    }
+
+    node "Telephone IOS"<<Device>> {
+        component "Application Livreur" as ios
+    }
+
+    node "Navigateur Web" {
+        component "Site Web" as website
+        component "Espace d'administration" as admin
+    }
+
+    android_l -[hidden]- android_p
+
+    Backend - HTTP
+    HTTP )- android_p
+    HTTP )- android_l
+    HTTP )-- ios
+    website ---( HTTP
+    admin --( HTTP
+
+@enduml
